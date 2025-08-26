@@ -7,7 +7,7 @@ pipeline {
     ANSIBLE_STDOUT_CALLBACK = 'yaml'
   }
   triggers {
-    // If webhooks aren't set up, this will check for changes periodically.
+    // Poll SCM every 5 minutes
     pollSCM('H/5 * * * *')
   }
   stages {
@@ -29,12 +29,10 @@ pipeline {
     }
     stage('Deploy to AWS & Azure') {
       steps {
-        sshagent(credentials: ['jenkins-ssh']) {
-          ansiColor('xterm') {
-            sh '''
-              ansible-playbook -i inventories/inventory.ini playbooks/jenkins_deploy.yml -vv
-            '''
-          }
+        ansiColor('xterm') {
+          sh '''
+            ansible-playbook -i inventories/inventory.ini playbooks/jenkins_deploy.yml -vv
+          '''
         }
       }
     }
