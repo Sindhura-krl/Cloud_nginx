@@ -21,7 +21,7 @@ pipeline {
         ansiColor('xterm') {
           sh '''
             ansible --version
-            ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yaml --syntax-check
+            ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yml --syntax-check
             ansible-inventory -i inventories/inventory.yaml --list >/dev/null
           '''
         }
@@ -32,7 +32,7 @@ pipeline {
         sshagent(credentials: ['jenkins-ssh']) {
           ansiColor('xterm') {
             sh '''
-              ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yaml -vv
+              ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yml -vv
             '''
           }
         }
