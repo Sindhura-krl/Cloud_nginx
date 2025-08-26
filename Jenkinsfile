@@ -21,8 +21,8 @@ pipeline {
         ansiColor('xterm') {
           sh '''
             ansible --version
-            ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yml --syntax-check
-            ansible-inventory -i inventories/inventory.yaml --list >/dev/null
+            ansible-playbook -i inventories/inventory.ini playbooks/jenkins_deploy.yml --syntax-check
+            ansible-inventory -i inventories/inventory.ini --list >/dev/null
           '''
         }
       }
@@ -32,7 +32,7 @@ pipeline {
         sshagent(credentials: ['jenkins-ssh']) {
           ansiColor('xterm') {
             sh '''
-              ansible-playbook -i inventories/inventory.yaml playbooks/jenkins_deploy.yml -vv
+              ansible-playbook -i inventories/inventory.ini playbooks/jenkins_deploy.yml -vv
             '''
           }
         }
@@ -42,8 +42,8 @@ pipeline {
       steps {
         ansiColor('xterm') {
           sh '''
-            AWS_IP=$(awk '/^aws-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.yaml)
-            AZURE_IP=$(awk '/^azure-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.yaml)
+            AWS_IP=$(awk '/^aws-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.ini)
+            AZURE_IP=$(awk '/^azure-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.ini)
             curl -s --max-time 5 "http://$AWS_IP/"   | grep -q "Welcome to AWS"
             curl -s --max-time 5 "http://$AZURE_IP/" | grep -q "Welcome to Azure"
           '''
