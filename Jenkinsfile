@@ -51,6 +51,5 @@ pipeline {
   }
   post {
     success { echo '✅ Deployed and verified.' }
-    failure { echo '❌ Deployment failed. Check console log.' }
   }
 }
