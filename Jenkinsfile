@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'git@github.com:Sindhura-krl/Cloud_nginx.git', branch: 'main'
+        git url: 'git@github.com:Sindhura-krl/Cloud_nginx.git', branch: 'main',credentialsId: 'jenkins-ssh'
       }
     }
     stage('Sanity checks') {
