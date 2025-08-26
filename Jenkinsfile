@@ -42,6 +42,8 @@ pipeline {
           sh '''
             AWS_IP=$(awk '/^aws-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.ini)
             AZURE_IP=$(awk '/^azure-app/ { for(i=1;i<=NF;i++) if($i ~ /ansible_host=/){split($i,a,"="); print a[2]}}' inventories/inventory.ini)
+            echo $AWS_IP
+            echo $AZURE_IP
             curl -s --max-time 5 "http://$AWS_IP/"   | grep -q "Welcome to AWS"
             curl -s --max-time 5 "http://$AZURE_IP/" | grep -q "Welcome to Azure"
           '''
