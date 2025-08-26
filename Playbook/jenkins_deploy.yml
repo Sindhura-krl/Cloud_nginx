@@ -1,55 +1,42 @@
 ---
-- name: Deploy AWS content
+- name: Deploy AWS page
   hosts: aws
   become: true
   tasks:
-    - name: Copy AWS index
-      copy:
+    - copy:
         src: "{{ playbook_dir }}/../files/index-aws.html"
         dest: /var/www/html/index.html
         owner: www-data
         group: www-data
         mode: "0644"
-
-    - name: Restart Nginx
-      service:
+    - service:
         name: nginx
         state: restarted
-
-    - name: Verify page
-      uri:
+    - uri:
         url: "http://{{ ansible_host }}/"
         return_content: true
-      register: resp
-    - name: Assert content
-      assert:
-        that: "'Welcome to AWS' in resp.content"
-        fail_msg: "AWS page did not contain expected text"
+      register: resp_aws
+    - assert:
+        that: "'Welcome to AWS' in resp_aws.content"
+        fail_msg: "AWS page missing expected text"
 
-- name: Deploy Azure content
+- name: Deploy Azure page
   hosts: azure
   become: true
   tasks:
-    - name: Copy Azure index
-      copy:
+    - copy:
         src: "{{ playbook_dir }}/../files/index-azure.html"
         dest: /var/www/html/index.html
         owner: www-data
         group: www-data
         mode: "0644"
-
-    - name: Restart Nginx
-      service:
+    - service:
         name: nginx
         state: restarted
-
-    - name: Verify page
-      uri:
+    - uri:
         url: "http://{{ ansible_host }}/"
         return_content: true
-      register: resp
-    - name: Assert content
-      assert:
-        that: "'Welcome to Azure' in resp.content"
-        fail_msg: "Azure page did not contain expected text"
-
+      register: resp_az
+    - assert:
+        that: "'Welcome to Azure' in resp_az.content"
+        fail_msg: "Azure page missing expected text"
