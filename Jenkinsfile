@@ -5,6 +5,7 @@ pipeline {
   }
   environment {
     ANSIBLE_STDOUT_CALLBACK = 'yaml'
+     ANSIBLE_HOST_KEY_CHECKING = 'False'
   }
   triggers {
     // Poll SCM every 5 minutes
